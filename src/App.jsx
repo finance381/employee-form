@@ -3,19 +3,166 @@ import { supabase } from './lib/supabase'
 import { prepUpload } from './lib/uploadHelper'
 
 var DOC_TYPES = [
-  { key: 'aadhaar', label: 'Aadhaar Card', required: false },
-  { key: 'pan', label: 'PAN Card', required: false },
-  { key: 'passport', label: 'Passport', required: false },
-  { key: 'resume', label: 'Resume', required: false },
-  { key: 'driving_license', label: 'Driving Licence', required: false },
-  { key: 'voter_id', label: 'Voter ID', required: false },
-  { key: 'bank_proof', label: 'Bank Passbook / Cheque', required: false },
-  { key: 'education', label: 'Educational Certificate', required: false },
-  { key: 'previous_employment', label: 'Previous Employment Letter', required: false },
-  { key: 'address_proof', label: 'Address Proof', required: false },
-  { key: 'medical_fitness', label: 'Medical Fitness Certificate', required: false },
-  { key: 'police_verification', label: 'Police Verification', required: false }
+  { key: 'aadhaar', label: 'Aadhaar Card', labelKey: 'doc_aadhaar', required: false },
+  { key: 'pan', label: 'PAN Card', labelKey: 'doc_pan', required: false },
+  { key: 'passport', label: 'Passport', labelKey: 'doc_passport', required: false },
+  { key: 'resume', label: 'Resume', labelKey: 'doc_resume', required: false },
+  { key: 'driving_license', label: 'Driving Licence', labelKey: 'doc_driving_license', required: false },
+  { key: 'voter_id', label: 'Voter ID', labelKey: 'doc_voter_id', required: false },
+  { key: 'bank_proof', label: 'Bank Passbook / Cheque', labelKey: 'doc_bank_proof', required: false },
+  { key: 'education', label: 'Educational Certificate', labelKey: 'doc_education', required: false },
+  { key: 'previous_employment', label: 'Previous Employment Letter', labelKey: 'doc_previous_employment', required: false },
+  { key: 'address_proof', label: 'Address Proof', labelKey: 'doc_address_proof', required: false },
+  { key: 'medical_fitness', label: 'Medical Fitness Certificate', labelKey: 'doc_medical_fitness', required: false },
+  { key: 'police_verification', label: 'Police Verification', labelKey: 'doc_police_verification', required: false }
 ]
+
+var T = {
+  en: {
+    header_title: 'New Employee Joining Form',
+    header_subtitle: 'Fill in your details to join',
+    success_title: 'Submission Received',
+    success_msg: 'Your details have been submitted successfully.',
+    success_ref: 'Reference Number',
+    success_hint: 'Please share this reference with HR. Someone will contact you for next steps.',
+    lang_en: 'EN', lang_hi: 'हिं',
+
+    sec1_title: 'Personal Details', sec1_sub: 'Basic information about you',
+    sec2_title: 'Address', sec2_sub: 'Where you live',
+    sec3_title: 'Emergency Contact', sec3_sub: 'In case we need to reach someone',
+    sec4_title: 'Bank Details', sec4_sub: 'Optional — for salary transfer',
+    sec5_title: 'Salary', sec5_sub: 'Wages and monthly salary',
+    sec6_title: 'Previous Employment', sec6_sub: 'Your last job details',
+    sec7_title: 'Documents', sec7_sub: 'All uploads optional',
+    sec8_title: 'Declaration', sec8_sub: '',
+
+    lbl_photo: 'Employee Photo', lbl_source: 'Source / Reference by',
+    lbl_full_name: 'Full Name', lbl_father_name: "Father's Name",
+    lbl_dob: 'Date of Birth', lbl_gender: 'Gender',
+    lbl_mobile: 'Mobile Number', lbl_email: 'Email ID',
+    lbl_aadhaar_no: 'Aadhaar Number', lbl_pan_no: 'PAN Number',
+    gender_select: '-- Select --', gender_male: 'Male', gender_female: 'Female', gender_other: 'Other',
+    lbl_cur_addr: 'Current Address', lbl_cur_pin: 'Current Pin Code',
+    lbl_perm_same: 'Permanent address same as current',
+    lbl_perm_addr: 'Permanent Address', lbl_perm_pin: 'Permanent Pin Code',
+    lbl_emg_name: 'Contact Person Name', lbl_relationship: 'Relationship',
+    lbl_bank_name: 'Bank Name', lbl_branch: 'Branch',
+    lbl_acct_num: 'Account Number', lbl_ifsc: 'IFSC Code',
+    lbl_night_wage: 'Nightly Wages (₹)', lbl_new_salary: 'New Salary (₹ / month)',
+    lbl_resume: 'Resume',
+    lbl_hiring_person: 'Hiring Person', lbl_hire_department: 'Job Department',
+    ph_hiring_person: 'Name of person who hired you', ph_hire_department: 'e.g. Housekeeping, Kitchen',
+    lbl_prev_company: 'Previous Company Name', lbl_city: 'City', lbl_state: 'State',
+    lbl_prev_salary: 'Previous Drawn Salary (₹)',
+
+    ph_as_per_aadhaar: 'As per Aadhaar', ph_referrer: 'Who referred you?',
+    ph_10_digit: '10-digit number', ph_email: 'you@example.com',
+    ph_aadhaar_12: '12 digits', ph_pan_fmt: 'AAAAA9999A',
+    ph_addr: 'House / Street / City / State', ph_relationship: 'Father / Spouse / etc',
+    ph_ifsc: 'ABCD0123456', ph_company: 'Company name',
+    ph_city: 'City', ph_state: 'State',
+
+    doc_aadhaar: 'Aadhaar Card', doc_pan: 'PAN Card', doc_passport: 'Passport',
+    doc_resume: 'Resume', doc_driving_license: 'Driving Licence', doc_voter_id: 'Voter ID',
+    doc_bank_proof: 'Bank Passbook / Cheque', doc_education: 'Educational Certificate',
+    doc_previous_employment: 'Previous Employment Letter', doc_address_proof: 'Address Proof',
+    doc_medical_fitness: 'Medical Fitness Certificate', doc_police_verification: 'Police Verification',
+
+    decl_text: 'I declare that all information provided is correct and true to the best of my knowledge.',
+
+    photo_added: 'Photo added', retake: 'Retake', choose_diff: 'Choose different', remove: 'Remove',
+    add_photo: 'Add employee photo', add_photo_hint: 'Take a selfie or choose from gallery',
+    cam_btn: '📷 Camera', gal_btn: '🖼️ Gallery',
+    tap_upload: 'Tap to upload (image or PDF)',
+
+    err_full_name: 'Full Name required', err_mobile: 'Mobile Number required',
+    err_aadhaar_fmt: 'Aadhaar must be 12 digits', err_pan_fmt: 'PAN format invalid (AAAAA9999A)',
+    err_cur_addr: 'Current address required', err_emg: 'Emergency contact required',
+    err_new_salary: 'New Salary required', err_prev_company: 'Previous Company Name required',
+    err_prev_city: 'Previous City required', err_prev_state: 'Previous State required',
+    err_prev_salary: 'Previous Drawn Salary required', err_ifsc: 'IFSC format invalid',
+    err_declaration: 'Please accept the declaration',
+
+    prog_preparing: 'Preparing submission...', prog_photo: 'Compressing photo...',
+    prog_compressing: 'Compressing files...', prog_compressing_x: 'Compressing {name}...',
+    prog_uploading: 'Uploading...',
+    submitting: 'Submitting...', submit: 'Submit Form'
+  },
+  hi: {
+    header_title: 'नया कर्मचारी ज्वाइनिंग फॉर्म',
+    header_subtitle: 'अपने विवरण भरें',
+    success_title: 'जमा हो गया',
+    success_msg: 'आपके विवरण सफलतापूर्वक जमा हो गए हैं।',
+    success_ref: 'संदर्भ संख्या',
+    success_hint: 'कृपया इस संदर्भ संख्या को HR के साथ साझा करें। कोई आपसे अगले चरणों के लिए संपर्क करेगा।',
+    lang_en: 'EN', lang_hi: 'हिं',
+
+    sec1_title: 'व्यक्तिगत जानकारी', sec1_sub: 'आपकी बुनियादी जानकारी',
+    sec2_title: 'पता', sec2_sub: 'आप कहाँ रहते हैं',
+    sec3_title: 'आपातकालीन संपर्क', sec3_sub: 'आपात स्थिति में संपर्क',
+    sec4_title: 'बैंक विवरण', sec4_sub: 'वैकल्पिक — वेतन जमा के लिए',
+    sec5_title: 'वेतन', sec5_sub: 'मजदूरी और मासिक वेतन',
+    sec6_title: 'पिछला रोज़गार', sec6_sub: 'आपकी पिछली नौकरी के विवरण',
+    sec7_title: 'दस्तावेज़', sec7_sub: 'सभी अपलोड वैकल्पिक',
+    sec8_title: 'घोषणा', sec8_sub: '',
+
+    lbl_photo: 'कर्मचारी की फ़ोटो', lbl_source: 'संदर्भ / किसने भेजा',
+    lbl_full_name: 'पूरा नाम', lbl_father_name: 'पिता का नाम',
+    lbl_dob: 'जन्म तिथि', lbl_gender: 'लिंग',
+    lbl_mobile: 'मोबाइल नंबर', lbl_email: 'ईमेल आईडी',
+    lbl_aadhaar_no: 'आधार संख्या', lbl_pan_no: 'पैन संख्या',
+    gender_select: '-- चुनें --', gender_male: 'पुरुष', gender_female: 'महिला', gender_other: 'अन्य',
+    lbl_cur_addr: 'वर्तमान पता', lbl_cur_pin: 'वर्तमान पिन कोड',
+    lbl_perm_same: 'स्थायी पता वर्तमान पते के समान है',
+    lbl_perm_addr: 'स्थायी पता', lbl_perm_pin: 'स्थायी पिन कोड',
+    lbl_emg_name: 'संपर्क व्यक्ति का नाम', lbl_relationship: 'रिश्ता',
+    lbl_bank_name: 'बैंक का नाम', lbl_branch: 'शाखा',
+    lbl_acct_num: 'खाता संख्या', lbl_ifsc: 'IFSC कोड',
+    lbl_night_wage: 'रात्रि मजदूरी (₹)', lbl_new_salary: 'नया वेतन (₹ / माह)',
+    lbl_resume: 'रिज्यूमे',
+    lbl_hiring_person: 'भर्ती करने वाला', lbl_hire_department: 'कार्य विभाग',
+    ph_hiring_person: 'आपको भर्ती करने वाले का नाम', ph_hire_department: 'जैसे हाउसकीपिंग, रसोई',
+    lbl_prev_company: 'पिछली कंपनी का नाम', lbl_city: 'शहर', lbl_state: 'राज्य',
+    lbl_prev_salary: 'पिछला आहरित वेतन (₹)',
+
+    ph_as_per_aadhaar: 'आधार के अनुसार', ph_referrer: 'आपको किसने भेजा?',
+    ph_10_digit: '10 अंकों का नंबर', ph_email: 'you@example.com',
+    ph_aadhaar_12: '12 अंक', ph_pan_fmt: 'AAAAA9999A',
+    ph_addr: 'मकान / गली / शहर / राज्य', ph_relationship: 'पिता / जीवनसाथी / आदि',
+    ph_ifsc: 'ABCD0123456', ph_company: 'कंपनी का नाम',
+    ph_city: 'शहर', ph_state: 'राज्य',
+
+    doc_aadhaar: 'आधार कार्ड', doc_pan: 'पैन कार्ड', doc_passport: 'पासपोर्ट',
+    doc_resume: 'रिज्यूमे', doc_driving_license: 'ड्राइविंग लाइसेंस', doc_voter_id: 'मतदाता पहचान पत्र',
+    doc_bank_proof: 'बैंक पासबुक / चेक', doc_education: 'शैक्षिक प्रमाण पत्र',
+    doc_previous_employment: 'पिछले रोज़गार का पत्र', doc_address_proof: 'पता प्रमाण',
+    doc_medical_fitness: 'चिकित्सा फिटनेस प्रमाण पत्र', doc_police_verification: 'पुलिस सत्यापन',
+
+    decl_text: 'मैं घोषणा करता/करती हूँ कि ऊपर दी गई सभी जानकारी सही है।',
+
+    photo_added: 'फ़ोटो जोड़ी गई', retake: 'फिर से लें', choose_diff: 'दूसरी चुनें', remove: 'हटाएं',
+    add_photo: 'कर्मचारी की फ़ोटो जोड़ें', add_photo_hint: 'सेल्फी लें या गैलरी से चुनें',
+    cam_btn: '📷 कैमरा', gal_btn: '🖼️ गैलरी',
+    tap_upload: 'अपलोड करने के लिए दबाएं (छवि या PDF)',
+
+    err_full_name: 'पूरा नाम आवश्यक है', err_mobile: 'मोबाइल नंबर आवश्यक है',
+    err_aadhaar_fmt: 'आधार 12 अंकों का होना चाहिए', err_pan_fmt: 'पैन प्रारूप गलत है (AAAAA9999A)',
+    err_cur_addr: 'वर्तमान पता आवश्यक है', err_emg: 'आपातकालीन संपर्क आवश्यक है',
+    err_new_salary: 'नया वेतन आवश्यक है', err_prev_company: 'पिछली कंपनी का नाम आवश्यक है',
+    err_prev_city: 'पिछला शहर आवश्यक है', err_prev_state: 'पिछला राज्य आवश्यक है',
+    err_prev_salary: 'पिछला आहरित वेतन आवश्यक है', err_ifsc: 'IFSC प्रारूप गलत है',
+    err_declaration: 'कृपया घोषणा स्वीकार करें',
+
+    prog_preparing: 'जमा करने की तैयारी...', prog_photo: 'फ़ोटो संपीड़ित की जा रही है...',
+    prog_compressing: 'फ़ाइलें संपीड़ित की जा रही हैं...', prog_compressing_x: '{name} संपीड़ित की जा रही है...',
+    prog_uploading: 'अपलोड हो रहा है...',
+    submitting: 'जमा हो रहा है...', submit: 'फॉर्म जमा करें'
+  }
+}
+
+function tr(lang, k) {
+  return (T[lang] && T[lang][k]) || T.en[k] || k
+}
 
 function fileExt(name) {
   var i = name.lastIndexOf('.')
@@ -77,6 +224,7 @@ function PhotoUpload(props) {
   var galRef = useRef(null)
   var f = props.file
   var previewUrl = f ? URL.createObjectURL(f) : null
+  var t = props.t || function (k) { return k }
   function pickCam(e) { e.stopPropagation(); if (camRef.current) camRef.current.click() }
   function pickGal(e) { e.stopPropagation(); if (galRef.current) galRef.current.click() }
   function clear(e) { e.stopPropagation(); props.onChange(null); if (camRef.current) camRef.current.value = ''; if (galRef.current) galRef.current.value = '' }
@@ -91,12 +239,12 @@ function PhotoUpload(props) {
         <div className="flex items-center gap-4 border-2 border-dashed border-gray-200 rounded-xl p-4">
           <img src={previewUrl} alt="Photo" className="w-20 h-20 rounded-lg object-cover border border-gray-200" />
           <div className="flex-1 min-w-0">
-            <div className="text-sm font-medium text-gray-900">Photo added</div>
+            <div className="text-sm font-medium text-gray-900">{t('photo_added')}</div>
             <div className="text-xs text-gray-500 mt-0.5 truncate">{f.name + ' • ' + humanSize(f.size)}</div>
             <div className="flex gap-2 mt-2">
-              <button type="button" onClick={pickCam} className="text-xs px-2 py-1 rounded border border-indigo-200 text-indigo-600 hover:bg-indigo-50 font-medium">Retake</button>
-              <button type="button" onClick={pickGal} className="text-xs px-2 py-1 rounded border border-gray-200 text-gray-600 hover:bg-gray-50 font-medium">Choose different</button>
-              <button type="button" onClick={clear} className="text-xs px-2 py-1 rounded text-red-500 hover:text-red-600 font-medium ml-auto">Remove</button>
+              <button type="button" onClick={pickCam} className="text-xs px-2 py-1 rounded border border-indigo-200 text-indigo-600 hover:bg-indigo-50 font-medium">{t('retake')}</button>
+              <button type="button" onClick={pickGal} className="text-xs px-2 py-1 rounded border border-gray-200 text-gray-600 hover:bg-gray-50 font-medium">{t('choose_diff')}</button>
+              <button type="button" onClick={clear} className="text-xs px-2 py-1 rounded text-red-500 hover:text-red-600 font-medium ml-auto">{t('remove')}</button>
             </div>
           </div>
         </div>
@@ -109,18 +257,18 @@ function PhotoUpload(props) {
               </svg>
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-sm font-medium text-gray-900">Add employee photo</div>
-              <div className="text-xs text-gray-500 mt-0.5">Take a selfie or choose from gallery</div>
+              <div className="text-sm font-medium text-gray-900">{t('add_photo')}</div>
+              <div className="text-xs text-gray-500 mt-0.5">{t('add_photo_hint')}</div>
             </div>
           </div>
           <div className="flex gap-2 mt-3">
             <button type="button" onClick={pickCam}
               className="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition">
-              📷 Camera
+              {t('cam_btn')}
             </button>
             <button type="button" onClick={pickGal}
               className="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-white border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition">
-              🖼️ Gallery
+              {t('gal_btn')}
             </button>
           </div>
         </div>
@@ -132,6 +280,7 @@ function PhotoUpload(props) {
 function DocUpload(props) {
   var inputRef = useRef(null)
   var f = props.file
+  var t = props.t || function (k) { return k }
   function pick() { if (inputRef.current) inputRef.current.click() }
   function clear(e) { e.stopPropagation(); props.onChange(null); if (inputRef.current) inputRef.current.value = '' }
   return (
@@ -151,11 +300,11 @@ function DocUpload(props) {
             {props.label}{props.required ? <span className="text-red-500">*</span> : null}
           </div>
           <div className="text-xs text-gray-500 mt-0.5 truncate">
-            {f ? (f.name + ' • ' + humanSize(f.size)) : 'Tap to upload (image or PDF)'}
+            {f ? (f.name + ' • ' + humanSize(f.size)) : t('tap_upload')}
           </div>
         </div>
         {f ? (
-          <button type="button" onClick={clear} className="text-xs text-red-500 hover:text-red-600 font-medium shrink-0">Remove</button>
+          <button type="button" onClick={clear} className="text-xs text-red-500 hover:text-red-600 font-medium shrink-0">{t('remove')}</button>
         ) : null}
       </div>
     </div>
@@ -167,6 +316,14 @@ function PublicEmployeeForm() {
   var [done, setDone] = useState(null)
   var [error, setError] = useState('')
   var [uploadProgress, setUploadProgress] = useState('')
+  var [lang, setLang] = useState(function () {
+    try { var v = localStorage.getItem('emp_lang'); return v === 'en' ? 'en' : 'hi' } catch (e) { return 'hi' }
+  })
+  function switchLang(next) {
+    setLang(next)
+    try { localStorage.setItem('emp_lang', next) } catch (e) {}
+  }
+  function t(k) { return tr(lang, k) }
 
   var [sourceRef, setSourceRef] = useState('')
   var [photoFile, setPhotoFile] = useState(null)
@@ -197,6 +354,8 @@ function PublicEmployeeForm() {
   var [nightWage, setNightWage] = useState('')
   var [prevSalary, setPrevSalary] = useState('')
   var [newSalary, setNewSalary] = useState('')
+  var [hiringPerson, setHiringPerson] = useState('')
+  var [hireDepartment, setHireDepartment] = useState('')
 
   var [prevCompany, setPrevCompany] = useState('')
   var [prevCity, setPrevCity] = useState('')
@@ -218,23 +377,23 @@ function PublicEmployeeForm() {
     if (saving) return
     setError('')
 
-    if (!fullName.trim()) return setError('Full Name required')
-    if (!mobile.trim()) return setError('Mobile Number required')
-    if (aadhaar.trim() && !/^[0-9]{12}$/.test(aadhaar.replace(/\s/g, ''))) return setError('Aadhaar must be 12 digits')
-    if (pan.trim() && !/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(pan.trim().toUpperCase())) return setError('PAN format invalid (AAAAA9999A)')
-    if (!curAddr.trim()) return setError('Current address required')
-    if (!emgName.trim() || !emgRel.trim() || !emgMob.trim()) return setError('Emergency contact required')
-    if (!newSalary || Number(newSalary) <= 0) return setError('New Salary required')
-    if (!prevCompany.trim()) return setError('Previous Company Name required')
-    if (!prevCity.trim()) return setError('Previous City required')
-    if (!prevState.trim()) return setError('Previous State required')
-    if (!prevSalary || Number(prevSalary) <= 0) return setError('Previous Drawn Salary required')
-    if (ifsc && !/^[A-Z]{4}0[A-Z0-9]{6}$/.test(ifsc.trim().toUpperCase())) return setError('IFSC format invalid')
-    if (!declared) return setError('Please accept the declaration')
+    if (!fullName.trim()) return setError(t('err_full_name'))
+    if (!mobile.trim()) return setError(t('err_mobile'))
+    if (aadhaar.trim() && !/^[0-9]{12}$/.test(aadhaar.replace(/\s/g, ''))) return setError(t('err_aadhaar_fmt'))
+    if (pan.trim() && !/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(pan.trim().toUpperCase())) return setError(t('err_pan_fmt'))
+    if (!curAddr.trim()) return setError(t('err_cur_addr'))
+    if (!emgName.trim() || !emgRel.trim() || !emgMob.trim()) return setError(t('err_emg'))
+    if (!newSalary || Number(newSalary) <= 0) return setError(t('err_new_salary'))
+    if (!prevCompany.trim()) return setError(t('err_prev_company'))
+    if (!prevCity.trim()) return setError(t('err_prev_city'))
+    if (!prevState.trim()) return setError(t('err_prev_state'))
+    if (!prevSalary || Number(prevSalary) <= 0) return setError(t('err_prev_salary'))
+    if (ifsc && !/^[A-Z]{4}0[A-Z0-9]{6}$/.test(ifsc.trim().toUpperCase())) return setError(t('err_ifsc'))
+    if (!declared) return setError(t('err_declaration'))
 
     setSaving(true)
     try {
-      setUploadProgress('Preparing submission...')
+      setUploadProgress(t('prog_preparing'))
       var payload = {
         source_reference: sourceRef.trim() || null,
         full_name: fullName.trim(),
@@ -263,6 +422,8 @@ function PublicEmployeeForm() {
         previous_company_name: prevCompany.trim() || null,
         previous_city: prevCity.trim() || null,
         previous_state: prevState.trim() || null,
+        hiring_person: hiringPerson.trim() || null,
+        hire_department: hireDepartment.trim() || null,
         declaration_accepted: true,
         honey_field: honeyRef.current ? honeyRef.current.value : ''
       }
@@ -270,7 +431,7 @@ function PublicEmployeeForm() {
       var fd = new FormData()
       fd.append('payload', JSON.stringify(payload))
       if (photoFile) {
-        setUploadProgress('Compressing photo...')
+        setUploadProgress(t('prog_photo'))
         var photoF = await prepUpload(photoFile, 100)
         fd.append('photo', photoF, 'photo.' + fileExt(photoF.name))
       }
@@ -278,12 +439,12 @@ function PublicEmployeeForm() {
         var dt = DOC_TYPES[i]
         var f = docFiles[dt.key]
         if (!f) continue
-        setUploadProgress('Compressing ' + dt.label + '...')
+        setUploadProgress(t('prog_compressing_x').replace('{name}', t(dt.labelKey)))
         var prepped = await prepUpload(f, 200)
         fd.append('doc_' + dt.key, prepped, dt.key + '.' + fileExt(prepped.name))
       }
 
-      setUploadProgress('Uploading...')
+      setUploadProgress(t('prog_uploading'))
       var res = await supabase.functions.invoke('submit-employee', { body: fd })
       if (res.error) {
         var msg = res.error.message || 'Submission failed'
@@ -314,13 +475,13 @@ function PublicEmployeeForm() {
           <div className="w-20 h-20 mx-auto rounded-full bg-green-100 flex items-center justify-center mb-5">
             <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Submission Received</h1>
-          <p className="text-gray-500 text-sm mb-6">Your details have been submitted successfully.</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">{t('success_title')}</h1>
+          <p className="text-gray-500 text-sm mb-6">{t('success_msg')}</p>
           <div className="bg-gray-50 rounded-xl p-4 mb-6">
-            <div className="text-xs text-gray-500 mb-1">Reference Number</div>
+            <div className="text-xs text-gray-500 mb-1">{t('success_ref')}</div>
             <div className="font-mono text-lg font-semibold text-gray-900">{done.ref}</div>
           </div>
-          <p className="text-xs text-gray-500">Please share this reference with HR. Someone will contact you for next steps.</p>
+          <p className="text-xs text-gray-500">{t('success_hint')}</p>
         </div>
       </div>
     )
@@ -330,8 +491,24 @@ function PublicEmployeeForm() {
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
       <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
         <div className="max-w-3xl mx-auto px-4 py-6 md:py-8">
-          <h1 className="text-2xl md:text-3xl font-bold">New Employee Joining Form</h1>
-          <p className="text-indigo-100 text-sm mt-1">कर्मचारी ज्वाइनिंग फॉर्म • Fill in your details to join</p>
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0 flex-1">
+              <h1 className="text-2xl md:text-3xl font-bold">{t('header_title')}</h1>
+              <p className="text-indigo-100 text-sm mt-1">{t('header_subtitle')}</p>
+            </div>
+            <div className="flex rounded-full bg-white/20 backdrop-blur p-0.5 text-xs font-semibold shrink-0">
+              <button type="button" onClick={function () { switchLang('en') }}
+                className={'px-3 py-1 rounded-full transition ' + (lang === 'en' ? 'bg-white text-indigo-700' : 'text-white/90 hover:text-white')}
+                style={{ fontSize: '13px' }}>
+                {t('lang_en')}
+              </button>
+              <button type="button" onClick={function () { switchLang('hi') }}
+                className={'px-3 py-1 rounded-full transition ' + (lang === 'hi' ? 'bg-white text-indigo-700' : 'text-white/90 hover:text-white')}
+                style={{ fontSize: '13px' }}>
+                {t('lang_hi')}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -340,153 +517,160 @@ function PublicEmployeeForm() {
           <input ref={honeyRef} type="text" name="website" tabIndex="-1" autoComplete="off" />
         </div>
 
-        <Section n="1" title="Personal Details" subtitle="व्यक्तिगत जानकारी">
-          <Field label="Employee Photo" className="mb-5">
-            <PhotoUpload file={photoFile} onChange={setPhotoFile} />
+        <Section n="1" title={t('sec1_title')} subtitle={t('sec1_sub')}>
+          <Field label={t('lbl_photo')} className="mb-5">
+            <PhotoUpload file={photoFile} onChange={setPhotoFile} lang={lang} t={t} />
           </Field>
-          <Field label="Source / Reference by">
-            <TextInput value={sourceRef} onChange={function (e) { setSourceRef(e.target.value) }} placeholder="Who referred you?" />
+          <Field label={t('lbl_source')}>
+            <TextInput value={sourceRef} onChange={function (e) { setSourceRef(e.target.value) }} placeholder={t('ph_referrer')} />
           </Field>
-          <Field label="Full Name" required>
-            <TextInput value={fullName} onChange={function (e) { setFullName(e.target.value) }} placeholder="As per Aadhaar" />
+          <Field label={t('lbl_full_name')} required>
+            <TextInput value={fullName} onChange={function (e) { setFullName(e.target.value) }} placeholder={t('ph_as_per_aadhaar')} />
           </Field>
-          <Field label="Father's Name">
+          <Field label={t('lbl_father_name')}>
             <TextInput value={fatherName} onChange={function (e) { setFatherName(e.target.value) }} />
           </Field>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <Field label="Date of Birth">
+            <Field label={t('lbl_dob')}>
               <TextInput type="date" value={dob} onChange={function (e) { setDob(e.target.value) }} />
             </Field>
-            <Field label="Gender">
+            <Field label={t('lbl_gender')}>
               <SelectInput value={gender} onChange={function (e) { setGender(e.target.value) }}>
-                <option value="">-- Select --</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
+                <option value="">{t('gender_select')}</option>
+                <option value="Male">{t('gender_male')}</option>
+                <option value="Female">{t('gender_female')}</option>
+                <option value="Other">{t('gender_other')}</option>
               </SelectInput>
             </Field>
           </div>
-          <Field label="Mobile Number" required>
-            <TextInput type="tel" value={mobile} onChange={function (e) { setMobile(e.target.value) }} placeholder="10-digit number" />
+          <Field label={t('lbl_mobile')} required>
+            <TextInput type="tel" value={mobile} onChange={function (e) { setMobile(e.target.value) }} placeholder={t('ph_10_digit')} />
           </Field>
-          <Field label="Email ID">
-            <TextInput type="email" value={email} onChange={function (e) { setEmail(e.target.value) }} placeholder="you@example.com" />
+          <Field label={t('lbl_email')}>
+            <TextInput type="email" value={email} onChange={function (e) { setEmail(e.target.value) }} placeholder={t('ph_email')} />
           </Field>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <Field label="Aadhaar Number">
-              <TextInput value={aadhaar} onChange={function (e) { setAadhaar(e.target.value.replace(/\s/g, '')) }} maxLength="12" placeholder="12 digits" />
+            <Field label={t('lbl_aadhaar_no')}>
+              <TextInput value={aadhaar} onChange={function (e) { setAadhaar(e.target.value.replace(/\s/g, '')) }} maxLength="12" placeholder={t('ph_aadhaar_12')} />
             </Field>
-            <Field label="PAN Number">
-              <TextInput value={pan} onChange={function (e) { setPan(e.target.value.toUpperCase()) }} maxLength="10" placeholder="AAAAA9999A" />
+            <Field label={t('lbl_pan_no')}>
+              <TextInput value={pan} onChange={function (e) { setPan(e.target.value.toUpperCase()) }} maxLength="10" placeholder={t('ph_pan_fmt')} />
             </Field>
           </div>
         </Section>
 
-        <Section n="2" title="Address" subtitle="पता">
-          <Field label="Current Address" required>
-            <TextArea rows="2" value={curAddr} onChange={function (e) { setCurAddr(e.target.value) }} placeholder="House / Street / City / State" />
+        <Section n="2" title={t('sec2_title')} subtitle={t('sec2_sub')}>
+          <Field label={t('lbl_cur_addr')} required>
+            <TextArea rows="2" value={curAddr} onChange={function (e) { setCurAddr(e.target.value) }} placeholder={t('ph_addr')} />
           </Field>
-          <Field label="Current Pin Code">
+          <Field label={t('lbl_cur_pin')}>
             <TextInput value={curPin} onChange={function (e) { setCurPin(e.target.value.replace(/\D/g, '')) }} maxLength="10" />
           </Field>
           <label className="flex items-center gap-2.5 mb-4 cursor-pointer select-none py-1">
             <input type="checkbox" checked={permSame} onChange={function (e) { setPermSame(e.target.checked) }}
               className="w-4 h-4 accent-indigo-600" />
-            <span className="text-sm text-gray-700">Permanent address same as current</span>
+            <span className="text-sm text-gray-700">{t('lbl_perm_same')}</span>
           </label>
           {!permSame ? (
             <div>
-              <Field label="Permanent Address">
+              <Field label={t('lbl_perm_addr')}>
                 <TextArea rows="2" value={permAddr} onChange={function (e) { setPermAddr(e.target.value) }} />
               </Field>
-              <Field label="Permanent Pin Code" className="mb-0">
+              <Field label={t('lbl_perm_pin')} className="mb-0">
                 <TextInput value={permPin} onChange={function (e) { setPermPin(e.target.value.replace(/\D/g, '')) }} maxLength="10" />
               </Field>
             </div>
           ) : null}
         </Section>
 
-        <Section n="3" title="Emergency Contact" subtitle="आपातकालीन संपर्क">
-          <Field label="Contact Person Name" required>
+        <Section n="3" title={t('sec3_title')} subtitle={t('sec3_sub')}>
+          <Field label={t('lbl_emg_name')} required>
             <TextInput value={emgName} onChange={function (e) { setEmgName(e.target.value) }} />
           </Field>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <Field label="Relationship" required>
-              <TextInput value={emgRel} onChange={function (e) { setEmgRel(e.target.value) }} placeholder="Father / Spouse / etc" />
+            <Field label={t('lbl_relationship')} required>
+              <TextInput value={emgRel} onChange={function (e) { setEmgRel(e.target.value) }} placeholder={t('ph_relationship')} />
             </Field>
-            <Field label="Mobile Number" required className="mb-0">
+            <Field label={t('lbl_mobile')} required className="mb-0">
               <TextInput type="tel" value={emgMob} onChange={function (e) { setEmgMob(e.target.value) }} />
             </Field>
           </div>
         </Section>
 
-        <Section n="4" title="Bank Details" subtitle="Optional — for salary transfer">
+        <Section n="4" title={t('sec4_title')} subtitle={t('sec4_sub')}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <Field label="Bank Name">
+            <Field label={t('lbl_bank_name')}>
               <TextInput value={bankName} onChange={function (e) { setBankName(e.target.value) }} />
             </Field>
-            <Field label="Branch">
+            <Field label={t('lbl_branch')}>
               <TextInput value={branchName} onChange={function (e) { setBranchName(e.target.value) }} />
             </Field>
-            <Field label="Account Number">
+            <Field label={t('lbl_acct_num')}>
               <TextInput value={acctNum} onChange={function (e) { setAcctNum(e.target.value.replace(/\D/g, '')) }} />
             </Field>
-            <Field label="IFSC Code" className="mb-0">
-              <TextInput value={ifsc} onChange={function (e) { setIfsc(e.target.value.toUpperCase()) }} maxLength="11" placeholder="ABCD0123456" />
+            <Field label={t('lbl_ifsc')} className="mb-0">
+              <TextInput value={ifsc} onChange={function (e) { setIfsc(e.target.value.toUpperCase()) }} maxLength="11" placeholder={t('ph_ifsc')} />
             </Field>
           </div>
         </Section>
 
-        <Section n="5" title="Salary" subtitle="वेतन विवरण">
+        <Section n="5" title={t('sec5_title')} subtitle={t('sec5_sub')}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-            <Field label="Nightly Wages (₹)" className="mb-0">
+            <Field label={t('lbl_night_wage')} className="mb-0">
               <TextInput type="number" min="0" step="1" value={nightWage} onChange={function (e) { setNightWage(e.target.value) }} placeholder="0" />
             </Field>
-            <Field label="New Salary (₹ / month)" required className="mb-0">
+            <Field label={t('lbl_new_salary')} required className="mb-0">
               <TextInput type="number" min="0" step="1" value={newSalary} onChange={function (e) { setNewSalary(e.target.value) }} placeholder="0" />
             </Field>
           </div>
-          <DocUpload label="Resume" required={false}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+            <Field label={t('lbl_hiring_person')} className="mb-0">
+              <TextInput value={hiringPerson} onChange={function (e) { setHiringPerson(e.target.value) }} placeholder={t('ph_hiring_person')} />
+            </Field>
+            <Field label={t('lbl_hire_department')} className="mb-0">
+              <TextInput value={hireDepartment} onChange={function (e) { setHireDepartment(e.target.value) }} placeholder={t('ph_hire_department')} />
+            </Field>
+          </div>
+          <DocUpload label={t('lbl_resume')} required={false}
             file={docFiles.resume}
-            onChange={function (f) { setDocFile('resume', f) }} />
+            onChange={function (f) { setDocFile('resume', f) }} t={t} />
         </Section>
 
-        <Section n="6" title="Previous Employment" subtitle="पिछला रोज़गार">
+        <Section n="6" title={t('sec6_title')} subtitle={t('sec6_sub')}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <Field label="Previous Company Name" required>
-              <TextInput value={prevCompany} onChange={function (e) { setPrevCompany(e.target.value) }} placeholder="Company name" />
+            <Field label={t('lbl_prev_company')} required>
+              <TextInput value={prevCompany} onChange={function (e) { setPrevCompany(e.target.value) }} placeholder={t('ph_company')} />
             </Field>
-            <Field label="City" required>
-              <TextInput value={prevCity} onChange={function (e) { setPrevCity(e.target.value) }} placeholder="City" />
+            <Field label={t('lbl_city')} required>
+              <TextInput value={prevCity} onChange={function (e) { setPrevCity(e.target.value) }} placeholder={t('ph_city')} />
             </Field>
-            <Field label="State" required>
-              <TextInput value={prevState} onChange={function (e) { setPrevState(e.target.value) }} placeholder="State" />
+            <Field label={t('lbl_state')} required>
+              <TextInput value={prevState} onChange={function (e) { setPrevState(e.target.value) }} placeholder={t('ph_state')} />
             </Field>
-            <Field label="Previous Drawn Salary (₹)" required className="mb-0">
+            <Field label={t('lbl_prev_salary')} required className="mb-0">
               <TextInput type="number" min="0" step="1" value={prevSalary} onChange={function (e) { setPrevSalary(e.target.value) }} placeholder="0" />
             </Field>
           </div>
         </Section>
 
-        <Section n="7" title="Documents" subtitle="दस्तावेज़ (optional)">
+        <Section n="7" title={t('sec7_title')} subtitle={t('sec7_sub')}>
           <div className="space-y-3">
             {DOC_TYPES.filter(function (dt) { return dt.key !== 'resume' }).map(function (dt) {
               return (
-                <DocUpload key={dt.key} label={dt.label} required={dt.required}
+                <DocUpload key={dt.key} label={t(dt.labelKey)} required={dt.required}
                   file={docFiles[dt.key]}
-                  onChange={function (f) { setDocFile(dt.key, f) }} />
+                  onChange={function (f) { setDocFile(dt.key, f) }} t={t} />
               )
             })}
           </div>
         </Section>
 
-        <Section n="8" title="Declaration" subtitle="घोषणा">
+        <Section n="8" title={t('sec8_title')} subtitle={t('sec8_sub')}>
           <label className="flex items-start gap-3 cursor-pointer select-none">
             <input type="checkbox" checked={declared} onChange={function (e) { setDeclared(e.target.checked) }}
               className="mt-1 w-4 h-4 accent-indigo-600 shrink-0" />
             <span className="text-sm text-gray-700 leading-relaxed">
-              I declare that all information provided is correct and true to the best of my knowledge.
-              <span className="block text-gray-500 mt-1">(मैं घोषणा करता/करती हूँ कि ऊपर दी गई सभी जानकारी सही है।)</span>
+              {t('decl_text')}
             </span>
           </label>
         </Section>
@@ -506,7 +690,7 @@ function PublicEmployeeForm() {
           ) : null}
           <button onClick={handleSubmit} disabled={saving}
             className={'w-full py-3.5 rounded-xl font-semibold text-white shadow-md transition ' + (saving ? 'bg-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 hover:shadow-lg active:scale-[0.99]')}>
-            {saving ? 'Submitting...' : 'Submit Form'}
+            {saving ? t('submitting') : t('submit')}
           </button>
         </div>
       </div>
