@@ -224,6 +224,11 @@ function PublicEmployeeForm() {
     if (!/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(pan.trim().toUpperCase())) return setError('PAN format invalid (AAAAA9999A)')
     if (!curAddr.trim()) return setError('Current address required')
     if (!emgName.trim() || !emgRel.trim() || !emgMob.trim()) return setError('Emergency contact required')
+    if (!newSalary || Number(newSalary) <= 0) return setError('New Salary required')
+    if (!prevCompany.trim()) return setError('Previous Company Name required')
+    if (!prevCity.trim()) return setError('Previous City required')
+    if (!prevState.trim()) return setError('Previous State required')
+    if (!prevSalary || Number(prevSalary) <= 0) return setError('Previous Drawn Salary required')
     if (ifsc && !/^[A-Z]{4}0[A-Z0-9]{6}$/.test(ifsc.trim().toUpperCase())) return setError('IFSC format invalid')
     if (!declared) return setError('Please accept the declaration')
 
@@ -437,7 +442,7 @@ function PublicEmployeeForm() {
             <Field label="Nightly Wages (₹)" className="mb-0">
               <TextInput type="number" min="0" step="1" value={nightWage} onChange={function (e) { setNightWage(e.target.value) }} placeholder="0" />
             </Field>
-            <Field label="New Salary (₹ / month)" className="mb-0">
+            <Field label="New Salary (₹ / month)" required className="mb-0">
               <TextInput type="number" min="0" step="1" value={newSalary} onChange={function (e) { setNewSalary(e.target.value) }} placeholder="0" />
             </Field>
           </div>
@@ -446,18 +451,18 @@ function PublicEmployeeForm() {
             onChange={function (f) { setDocFile('resume', f) }} />
         </Section>
 
-        <Section n="6" title="Previous Employment" subtitle="पिछला रोज़गार (optional)">
+        <Section n="6" title="Previous Employment" subtitle="पिछला रोज़गार">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <Field label="Previous Company Name">
+            <Field label="Previous Company Name" required>
               <TextInput value={prevCompany} onChange={function (e) { setPrevCompany(e.target.value) }} placeholder="Company name" />
             </Field>
-            <Field label="City">
+            <Field label="City" required>
               <TextInput value={prevCity} onChange={function (e) { setPrevCity(e.target.value) }} placeholder="City" />
             </Field>
-            <Field label="State">
+            <Field label="State" required>
               <TextInput value={prevState} onChange={function (e) { setPrevState(e.target.value) }} placeholder="State" />
             </Field>
-            <Field label="Previous Drawn Salary (₹)" className="mb-0">
+            <Field label="Previous Drawn Salary (₹)" required className="mb-0">
               <TextInput type="number" min="0" step="1" value={prevSalary} onChange={function (e) { setPrevSalary(e.target.value) }} placeholder="0" />
             </Field>
           </div>
