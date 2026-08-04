@@ -31,7 +31,7 @@ var T = {
     sec2_title: 'Address', sec2_sub: 'Where you live',
     sec3_title: 'Emergency Contact', sec3_sub: 'In case we need to reach someone',
     sec4_title: 'Bank Details', sec4_sub: 'Optional — for salary transfer',
-    sec5_title: 'Salary', sec5_sub: 'Wages and monthly salary',
+    sec5_title: 'Joining Details', sec5_sub: 'Wages, salary and joining date',
     sec6_title: 'Previous Employment', sec6_sub: 'Your last job details',
     sec7_title: 'Documents', sec7_sub: 'All uploads optional',
     sec8_title: 'Declaration', sec8_sub: '',
@@ -51,6 +51,7 @@ var T = {
     lbl_night_wage: 'Nightly Wages (₹)', lbl_new_salary: 'New Salary (₹ / month)',
     lbl_resume: 'Resume',
     lbl_hiring_person: 'Hiring Person', lbl_hire_department: 'Job Department',
+    lbl_joining_date: 'Joining Date',
     ph_hiring_person: 'Name of person who hired you', ph_hire_department: 'e.g. Housekeeping, Kitchen',
     lbl_prev_company: 'Previous Company Name', lbl_city: 'City', lbl_state: 'State',
     lbl_prev_salary: 'Previous Drawn Salary (₹)',
@@ -101,7 +102,7 @@ var T = {
     sec2_title: 'पता', sec2_sub: 'आप कहाँ रहते हैं',
     sec3_title: 'आपातकालीन संपर्क', sec3_sub: 'आपात स्थिति में संपर्क',
     sec4_title: 'बैंक विवरण', sec4_sub: 'वैकल्पिक — वेतन जमा के लिए',
-    sec5_title: 'वेतन', sec5_sub: 'मजदूरी और मासिक वेतन',
+    sec5_title: 'ज्वाइनिंग विवरण', sec5_sub: 'मजदूरी, वेतन और ज्वाइनिंग तिथि',
     sec6_title: 'पिछला रोज़गार', sec6_sub: 'आपकी पिछली नौकरी के विवरण',
     sec7_title: 'दस्तावेज़', sec7_sub: 'सभी अपलोड वैकल्पिक',
     sec8_title: 'घोषणा', sec8_sub: '',
@@ -121,6 +122,7 @@ var T = {
     lbl_night_wage: 'रात्रि मजदूरी (₹)', lbl_new_salary: 'नया वेतन (₹ / माह)',
     lbl_resume: 'रिज्यूमे',
     lbl_hiring_person: 'भर्ती करने वाला', lbl_hire_department: 'कार्य विभाग',
+    lbl_joining_date: 'ज्वाइनिंग तिथि',
     ph_hiring_person: 'आपको भर्ती करने वाले का नाम', ph_hire_department: 'जैसे हाउसकीपिंग, रसोई',
     lbl_prev_company: 'पिछली कंपनी का नाम', lbl_city: 'शहर', lbl_state: 'राज्य',
     lbl_prev_salary: 'पिछला आहरित वेतन (₹)',
@@ -356,6 +358,7 @@ function PublicEmployeeForm() {
   var [newSalary, setNewSalary] = useState('')
   var [hiringPerson, setHiringPerson] = useState('')
   var [hireDepartment, setHireDepartment] = useState('')
+  var [joiningDate, setJoiningDate] = useState('')
 
   var [prevCompany, setPrevCompany] = useState('')
   var [prevCity, setPrevCity] = useState('')
@@ -424,6 +427,7 @@ function PublicEmployeeForm() {
         previous_state: prevState.trim() || null,
         hiring_person: hiringPerson.trim() || null,
         hire_department: hireDepartment.trim() || null,
+        doj: joiningDate || null,
         declaration_accepted: true,
         honey_field: honeyRef.current ? honeyRef.current.value : ''
       }
@@ -631,6 +635,9 @@ function PublicEmployeeForm() {
               <TextInput value={hireDepartment} onChange={function (e) { setHireDepartment(e.target.value) }} placeholder={t('ph_hire_department')} />
             </Field>
           </div>
+          <Field label={t('lbl_joining_date')}>
+            <TextInput type="date" value={joiningDate} onChange={function (e) { setJoiningDate(e.target.value) }} />
+          </Field>
           <DocUpload label={t('lbl_resume')} required={false}
             file={docFiles.resume}
             onChange={function (f) { setDocFile('resume', f) }} t={t} />
