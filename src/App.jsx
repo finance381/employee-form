@@ -3,11 +3,18 @@ import { supabase } from './lib/supabase'
 import { prepUpload } from './lib/uploadHelper'
 
 var DOC_TYPES = [
-  { key: 'aadhaar', label: 'Aadhaar Card', required: true },
-  { key: 'pan', label: 'PAN Card', required: true },
-  { key: 'bank_proof', label: 'Bank Passbook / Cheque', required: false },
+  { key: 'aadhaar', label: 'Aadhaar Card', required: false },
+  { key: 'pan', label: 'PAN Card', required: false },
   { key: 'passport', label: 'Passport', required: false },
-  { key: 'driving_license', label: 'Driving Licence', required: false }
+  { key: 'resume', label: 'Resume', required: false },
+  { key: 'driving_license', label: 'Driving Licence', required: false },
+  { key: 'voter_id', label: 'Voter ID', required: false },
+  { key: 'bank_proof', label: 'Bank Passbook / Cheque', required: false },
+  { key: 'education', label: 'Educational Certificate', required: false },
+  { key: 'previous_employment', label: 'Previous Employment Letter', required: false },
+  { key: 'address_proof', label: 'Address Proof', required: false },
+  { key: 'medical_fitness', label: 'Medical Fitness Certificate', required: false },
+  { key: 'police_verification', label: 'Police Verification', required: false }
 ]
 
 function fileExt(name) {
@@ -190,6 +197,10 @@ function PublicEmployeeForm() {
   var [nightWage, setNightWage] = useState('')
   var [prevSalary, setPrevSalary] = useState('')
 
+  var [prevCompany, setPrevCompany] = useState('')
+  var [prevCity, setPrevCity] = useState('')
+  var [prevState, setPrevState] = useState('')
+
   var [docFiles, setDocFiles] = useState({})
   var [declared, setDeclared] = useState(false)
 
@@ -213,8 +224,6 @@ function PublicEmployeeForm() {
     if (!curAddr.trim()) return setError('Current address required')
     if (!emgName.trim() || !emgRel.trim() || !emgMob.trim()) return setError('Emergency contact required')
     if (ifsc && !/^[A-Z]{4}0[A-Z0-9]{6}$/.test(ifsc.trim().toUpperCase())) return setError('IFSC format invalid')
-    if (!docFiles.aadhaar) return setError('Aadhaar Card upload required')
-    if (!docFiles.pan) return setError('PAN Card upload required')
     if (!declared) return setError('Please accept the declaration')
 
     setSaving(true)
@@ -244,6 +253,9 @@ function PublicEmployeeForm() {
         ifsc_code: ifsc.trim().toUpperCase() || null,
         night_wage_rupees: nightWage ? Number(nightWage) : null,
         prev_drawn_salary_rupees: prevSalary ? Number(prevSalary) : null,
+        previous_company_name: prevCompany.trim() || null,
+        previous_city: prevCity.trim() || null,
+        previous_state: prevState.trim() || null,
         declaration_accepted: true,
         honey_field: honeyRef.current ? honeyRef.current.value : ''
       }
@@ -418,7 +430,7 @@ function PublicEmployeeForm() {
           </div>
         </Section>
 
-        <Section n="5" title="Employment Details" subtitle="Wages information">
+        <Section n="5" title="Salary" subtitle="वेतन विवरण">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <Field label="Nightly Wages (₹)">
               <TextInput type="number" min="0" step="1" value={nightWage} onChange={function (e) { setNightWage(e.target.value) }} placeholder="0" />
@@ -429,7 +441,21 @@ function PublicEmployeeForm() {
           </div>
         </Section>
 
-        <Section n="6" title="Documents" subtitle="Aadhaar and PAN mandatory">
+        <Section n="6" title="Previous Employment" subtitle="पिछला रोज़गार (optional)">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <Field label="Previous Company Name">
+              <TextInput value={prevCompany} onChange={function (e) { setPrevCompany(e.target.value) }} placeholder="Company name" />
+            </Field>
+            <Field label="City">
+              <TextInput value={prevCity} onChange={function (e) { setPrevCity(e.target.value) }} placeholder="City" />
+            </Field>
+            <Field label="State" className="mb-0 md:col-span-2">
+              <TextInput value={prevState} onChange={function (e) { setPrevState(e.target.value) }} placeholder="State" />
+            </Field>
+          </div>
+        </Section>
+
+        <Section n="7" title="Documents" subtitle="दस्तावेज़ (optional)">
           <div className="space-y-3">
             {DOC_TYPES.map(function (dt) {
               return (
@@ -441,7 +467,7 @@ function PublicEmployeeForm() {
           </div>
         </Section>
 
-        <Section n="7" title="Declaration" subtitle="घोषणा">
+        <Section n="8" title="Declaration" subtitle="घोषणा">
           <label className="flex items-start gap-3 cursor-pointer select-none">
             <input type="checkbox" checked={declared} onChange={function (e) { setDeclared(e.target.checked) }}
               className="mt-1 w-4 h-4 accent-indigo-600 shrink-0" />
