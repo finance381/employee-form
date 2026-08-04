@@ -220,8 +220,8 @@ function PublicEmployeeForm() {
 
     if (!fullName.trim()) return setError('Full Name required')
     if (!mobile.trim()) return setError('Mobile Number required')
-    if (!/^[0-9]{12}$/.test(aadhaar.replace(/\s/g, ''))) return setError('Aadhaar must be 12 digits')
-    if (!/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(pan.trim().toUpperCase())) return setError('PAN format invalid (AAAAA9999A)')
+    if (aadhaar.trim() && !/^[0-9]{12}$/.test(aadhaar.replace(/\s/g, ''))) return setError('Aadhaar must be 12 digits')
+    if (pan.trim() && !/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(pan.trim().toUpperCase())) return setError('PAN format invalid (AAAAA9999A)')
     if (!curAddr.trim()) return setError('Current address required')
     if (!emgName.trim() || !emgRel.trim() || !emgMob.trim()) return setError('Emergency contact required')
     if (!newSalary || Number(newSalary) <= 0) return setError('New Salary required')
@@ -373,10 +373,10 @@ function PublicEmployeeForm() {
             <TextInput type="email" value={email} onChange={function (e) { setEmail(e.target.value) }} placeholder="you@example.com" />
           </Field>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <Field label="Aadhaar Number" required>
+            <Field label="Aadhaar Number">
               <TextInput value={aadhaar} onChange={function (e) { setAadhaar(e.target.value.replace(/\s/g, '')) }} maxLength="12" placeholder="12 digits" />
             </Field>
-            <Field label="PAN Number" required>
+            <Field label="PAN Number">
               <TextInput value={pan} onChange={function (e) { setPan(e.target.value.toUpperCase()) }} maxLength="10" placeholder="AAAAA9999A" />
             </Field>
           </div>
