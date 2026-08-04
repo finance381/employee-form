@@ -48,6 +48,7 @@ var T = {
     lbl_emg_name: 'Contact Person Name', lbl_relationship: 'Relationship',
     lbl_bank_name: 'Bank Name', lbl_branch: 'Branch',
     lbl_acct_num: 'Account Number', lbl_ifsc: 'IFSC Code',
+    lbl_bank_holder: 'Account Holder Name',
     lbl_night_wage: 'Nightly Wages (₹)', lbl_new_salary: 'New Salary (₹ / month)',
     lbl_resume: 'Resume',
     lbl_hiring_person: 'Hiring Person', lbl_hire_department: 'Job Department',
@@ -119,6 +120,7 @@ var T = {
     lbl_emg_name: 'संपर्क व्यक्ति का नाम', lbl_relationship: 'रिश्ता',
     lbl_bank_name: 'बैंक का नाम', lbl_branch: 'शाखा',
     lbl_acct_num: 'खाता संख्या', lbl_ifsc: 'IFSC कोड',
+    lbl_bank_holder: 'खाताधारक का नाम',
     lbl_night_wage: 'रात्रि मजदूरी (₹)', lbl_new_salary: 'नया वेतन (₹ / माह)',
     lbl_resume: 'रिज्यूमे',
     lbl_hiring_person: 'भर्ती करने वाला', lbl_hire_department: 'कार्य विभाग',
@@ -348,6 +350,7 @@ function PublicEmployeeForm() {
   var [emgRel, setEmgRel] = useState('')
   var [emgMob, setEmgMob] = useState('')
 
+  var [bankHolderName, setBankHolderName] = useState('')
   var [bankName, setBankName] = useState('')
   var [branchName, setBranchName] = useState('')
   var [acctNum, setAcctNum] = useState('')
@@ -415,6 +418,7 @@ function PublicEmployeeForm() {
         emergency_contact_name: emgName.trim(),
         emergency_contact_relationship: emgRel.trim(),
         emergency_contact_number: emgMob.trim(),
+        bank_account_holder_name: bankHolderName.trim() || null,
         bank_name: bankName.trim() || null,
         branch_name: branchName.trim() || null,
         bank_account_number: acctNum.trim() || null,
@@ -603,6 +607,9 @@ function PublicEmployeeForm() {
 
         <Section n="4" title={t('sec4_title')} subtitle={t('sec4_sub')}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <Field label={t('lbl_bank_holder')}>
+              <TextInput value={bankHolderName} onChange={function (e) { setBankHolderName(e.target.value) }} />
+            </Field>
             <Field label={t('lbl_bank_name')}>
               <TextInput value={bankName} onChange={function (e) { setBankName(e.target.value) }} />
             </Field>
