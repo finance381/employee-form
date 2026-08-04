@@ -196,6 +196,7 @@ function PublicEmployeeForm() {
 
   var [nightWage, setNightWage] = useState('')
   var [prevSalary, setPrevSalary] = useState('')
+  var [newSalary, setNewSalary] = useState('')
 
   var [prevCompany, setPrevCompany] = useState('')
   var [prevCity, setPrevCity] = useState('')
@@ -253,6 +254,7 @@ function PublicEmployeeForm() {
         ifsc_code: ifsc.trim().toUpperCase() || null,
         night_wage_rupees: nightWage ? Number(nightWage) : null,
         prev_drawn_salary_rupees: prevSalary ? Number(prevSalary) : null,
+        new_salary_rupees: newSalary ? Number(newSalary) : null,
         previous_company_name: prevCompany.trim() || null,
         previous_city: prevCity.trim() || null,
         previous_state: prevState.trim() || null,
@@ -431,14 +433,17 @@ function PublicEmployeeForm() {
         </Section>
 
         <Section n="5" title="Salary" subtitle="वेतन विवरण">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <Field label="Nightly Wages (₹)">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+            <Field label="Nightly Wages (₹)" className="mb-0">
               <TextInput type="number" min="0" step="1" value={nightWage} onChange={function (e) { setNightWage(e.target.value) }} placeholder="0" />
             </Field>
-            <Field label="Previous Drawn Salary (₹)" className="mb-0">
-              <TextInput type="number" min="0" step="1" value={prevSalary} onChange={function (e) { setPrevSalary(e.target.value) }} placeholder="0" />
+            <Field label="New Salary (₹ / month)" className="mb-0">
+              <TextInput type="number" min="0" step="1" value={newSalary} onChange={function (e) { setNewSalary(e.target.value) }} placeholder="0" />
             </Field>
           </div>
+          <DocUpload label="Resume" required={false}
+            file={docFiles.resume}
+            onChange={function (f) { setDocFile('resume', f) }} />
         </Section>
 
         <Section n="6" title="Previous Employment" subtitle="पिछला रोज़गार (optional)">
@@ -449,15 +454,18 @@ function PublicEmployeeForm() {
             <Field label="City">
               <TextInput value={prevCity} onChange={function (e) { setPrevCity(e.target.value) }} placeholder="City" />
             </Field>
-            <Field label="State" className="mb-0 md:col-span-2">
+            <Field label="State">
               <TextInput value={prevState} onChange={function (e) { setPrevState(e.target.value) }} placeholder="State" />
+            </Field>
+            <Field label="Previous Drawn Salary (₹)" className="mb-0">
+              <TextInput type="number" min="0" step="1" value={prevSalary} onChange={function (e) { setPrevSalary(e.target.value) }} placeholder="0" />
             </Field>
           </div>
         </Section>
 
         <Section n="7" title="Documents" subtitle="दस्तावेज़ (optional)">
           <div className="space-y-3">
-            {DOC_TYPES.map(function (dt) {
+            {DOC_TYPES.filter(function (dt) { return dt.key !== 'resume' }).map(function (dt) {
               return (
                 <DocUpload key={dt.key} label={dt.label} required={dt.required}
                   file={docFiles[dt.key]}
