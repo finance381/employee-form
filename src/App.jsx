@@ -388,12 +388,7 @@ function PublicEmployeeForm() {
     if (aadhaar.trim() && !/^[0-9]{12}$/.test(aadhaar.replace(/\s/g, ''))) return setError(t('err_aadhaar_fmt'))
     if (pan.trim() && !/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(pan.trim().toUpperCase())) return setError(t('err_pan_fmt'))
     if (!curAddr.trim()) return setError(t('err_cur_addr'))
-    if (!emgName.trim() || !emgRel.trim() || !emgMob.trim()) return setError(t('err_emg'))
     if (!newSalary || Number(newSalary) <= 0) return setError(t('err_new_salary'))
-    if (!prevCompany.trim()) return setError(t('err_prev_company'))
-    if (!prevCity.trim()) return setError(t('err_prev_city'))
-    if (!prevState.trim()) return setError(t('err_prev_state'))
-    if (!prevSalary || Number(prevSalary) <= 0) return setError(t('err_prev_salary'))
     if (ifsc && !/^[A-Z]{4}0[A-Z0-9]{6}$/.test(ifsc.trim().toUpperCase())) return setError(t('err_ifsc'))
     if (!declared) return setError(t('err_declaration'))
 
@@ -592,14 +587,14 @@ function PublicEmployeeForm() {
         </Section>
 
         <Section n="3" title={t('sec3_title')} subtitle={t('sec3_sub')}>
-          <Field label={t('lbl_emg_name')} required>
+          <Field label={t('lbl_emg_name')}>
             <TextInput value={emgName} onChange={function (e) { setEmgName(e.target.value) }} />
           </Field>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <Field label={t('lbl_relationship')} required>
+            <Field label={t('lbl_relationship')}>
               <TextInput value={emgRel} onChange={function (e) { setEmgRel(e.target.value) }} placeholder={t('ph_relationship')} />
             </Field>
-            <Field label={t('lbl_mobile')} required className="mb-0">
+            <Field label={t('lbl_mobile')} className="mb-0">
               <TextInput type="tel" value={emgMob} onChange={function (e) { setEmgMob(e.target.value) }} />
             </Field>
           </div>
@@ -652,16 +647,16 @@ function PublicEmployeeForm() {
 
         <Section n="6" title={t('sec6_title')} subtitle={t('sec6_sub')}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <Field label={t('lbl_prev_company')} required>
+            <Field label={t('lbl_prev_company')}>
               <TextInput value={prevCompany} onChange={function (e) { setPrevCompany(e.target.value) }} placeholder={t('ph_company')} />
             </Field>
-            <Field label={t('lbl_city')} required>
+            <Field label={t('lbl_city')}>
               <TextInput value={prevCity} onChange={function (e) { setPrevCity(e.target.value) }} placeholder={t('ph_city')} />
             </Field>
-            <Field label={t('lbl_state')} required>
+            <Field label={t('lbl_state')}>
               <TextInput value={prevState} onChange={function (e) { setPrevState(e.target.value) }} placeholder={t('ph_state')} />
             </Field>
-            <Field label={t('lbl_prev_salary')} required className="mb-0">
+            <Field label={t('lbl_prev_salary')} className="mb-0">
               <TextInput type="number" min="0" step="1" value={prevSalary} onChange={function (e) { setPrevSalary(e.target.value) }} placeholder="0" />
             </Field>
           </div>
